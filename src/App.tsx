@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { evaluate } from "mathjs"; // THIS PACKAGE IS A LIFESAVER
+import { evaluate, log } from "mathjs"; // THIS PACKAGE IS A LIFESAVER
 import "./App.css";
 
 const buttonValues = [
@@ -15,8 +15,13 @@ const operationSymbols = ["/", "*", "-", "+", "%"];
 function App() {
   const [equationDisplay, setEquationDisplay] = useState(""); // what is shown in the display above buttons
   const [recentEquation, setRecentEquation] = useState("");
+  const [theme, setTheme] = useState<[string, string]>([
+    "lightblue",
+    "#91b4bf",
+  ]);
 
   const equationSpanRef = useRef<HTMLSpanElement>(null);
+  const calcDivRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     if (equationDisplay.length <= 12) {
@@ -28,6 +33,16 @@ function App() {
     if (equationDisplay.length > 15) {
       equationSpanRef.current!.style.fontSize = "25px";
     }
+
+    calcDivRef.current!.style.border = `2px solid ${theme[0]}`;
+    document.querySelectorAll("button").forEach((b) => {
+      b.style.backgroundColor = theme[0];
+    });
+    Array.from(document.getElementsByClassName("dark-button")).forEach(
+      (b: any) => {
+        b.style.backgroundColor = theme[1];
+      }
+    );
   });
 
   function ButtonClick(value: any) {
@@ -78,7 +93,7 @@ function App() {
 
   return (
     <div>
-      <div id="calculator">
+      <div id="calculator" ref={calcDivRef}>
         <div id="calc_display_area">
           <span id="recent_equation_area">
             {recentEquation !== "" && (
@@ -152,6 +167,41 @@ function App() {
             );
           })}
         </div>
+      </div>
+
+      <div style={{ textAlign: "center", marginTop: "25px" }}>
+        <span style={{ marginRight: "5px" }}>Select theme</span>
+        <select
+          onChange={(e: any) => {
+            switch (e.target.value) {
+              case "blue":
+                setTheme(["lightblue", "#91b4bf"]);
+                break;
+
+              case "green":
+                setTheme(["lightgreen", "#6bb36b"]);
+                break;
+
+              case "red":
+                setTheme(["#FFCCCB", "#b89493"]);
+                break;
+
+              case "yellow":
+                setTheme(["#FFFACD", "#d1d1b8"]);
+                break;
+
+              case "orange":
+                setTheme(["#FFD580", "#c9a865"]);
+                break;
+            }
+          }}
+        >
+          <option value="blue">Blue</option>
+          <option value="green">Green</option>
+          <option value="orange">Orange</option>
+          <option value="red">Red</option>
+          <option value="yellow">Yellow</option>
+        </select>
       </div>
 
       <div style={{ textAlign: "center", marginTop: "100px" }}>

@@ -8,7 +8,6 @@ body {
 }
 
 #calculator {
-  border: 2px solid black;
   width: 325px;
   border-radius: 10px;
   margin: auto;
@@ -31,14 +30,13 @@ body {
 
 #calc_buttons_area {
   margin: auto;
-  background-color: #f2f2f2;
   border-bottom-left-radius: 10px;
   border-bottom-right-radius: 10px;
   padding-top: 10px;
+  background-color: #f2f2f2;
 }
 
 button {
-  background-color: lightblue;
   width: 75px;
   height: 50px;
   margin: 3px;
@@ -51,8 +49,4 @@ button {
 
 .half_stretch {
   width: 157px;
-}
-
-.dark-button {
-  background-color: #91b4bf;
 }
