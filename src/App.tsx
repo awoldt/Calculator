@@ -1,9 +1,9 @@
 import { useState } from "react";
-import { evaluate } from "mathjs"; // THIS PACKAGE IS A LIFESAVER
+import { evaluate, log } from "mathjs"; // THIS PACKAGE IS A LIFESAVER
 import "./App.css";
 
 const buttonValues = [
-  ["C", "+/-", "%", "÷"],
+  ["C", "BACKSPACE", "%", "÷"],
   ["7", "8", "9", "*"],
   ["4", "5", "6", "-"],
   ["1", "2", "3", "+"],
@@ -14,10 +14,12 @@ const operationSymbols = ["/", "*", "-", "+", "%"];
 
 function App() {
   const [equationDisplay, setEquationDisplay] = useState(""); // what is shown in the display above buttons
+  const [recentEquation, setRecentEquation] = useState("");
 
   function ButtonClick(value: any) {
     switch (value) {
       case "C":
+        setRecentEquation("");
         setEquationDisplay("");
         break;
 
@@ -30,7 +32,19 @@ function App() {
           equationDisplay.includes("%")
         ) {
           try {
-            setEquationDisplay(String(evaluate(equationDisplay)));
+            setRecentEquation(equationDisplay);
+
+            let t: number = evaluate(equationDisplay);
+            console.log("total is " + t);
+            if (t % 1 === 0) {
+              console.log("whole number!");
+            } else {
+              console.log("not whole number!");
+              t = Number(t.toFixed(2));
+              console.log(t);
+            }
+
+            setEquationDisplay(String(t));
           } catch (err) {}
         }
         break;
@@ -56,7 +70,12 @@ function App() {
   return (
     <div>
       <div id="calculator">
-        <div id="calc_display_area">{equationDisplay}</div>
+        <div id="calc_display_area">
+          <span id="recent_equation_area">
+            {recentEquation !== "" && recentEquation}
+          </span>
+          {equationDisplay !== "" ? equationDisplay : undefined}
+        </div>
 
         <div id="calc_buttons_area">
           {buttonValues.map((x) => {
@@ -71,6 +90,16 @@ function App() {
                       }}
                     >
                       {y}
+                    </button>
+                  ) : y === "BACKSPACE" ? (
+                    <button
+                      onClick={() => {
+                        if (equationDisplay !== "") {
+                          setEquationDisplay((prev) => prev.slice(0, -1));
+                        }
+                      }}
+                    >
+                      &#8592;
                     </button>
                   ) : (
                     <button
