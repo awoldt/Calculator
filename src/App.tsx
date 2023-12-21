@@ -49,9 +49,7 @@ function App() {
             setRecentEquation(equationDisplay);
             let t: number = evaluate(equationDisplay);
             if (t % 1 !== 0) {
-              console.log("not whole number!");
               t = Number(t.toFixed(2));
-              console.log(t);
             }
             setEquationDisplay(String(t));
           } catch (err) {
