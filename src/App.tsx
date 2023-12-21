@@ -1,5 +1,5 @@
 import { useEffect, useRef, useState } from "react";
-import { evaluate, log } from "mathjs"; // THIS PACKAGE IS A LIFESAVER
+import { evaluate } from "mathjs"; // THIS PACKAGE IS A LIFESAVER
 import "./App.css";
 
 const buttonValues = [
@@ -15,9 +15,10 @@ const operationSymbols = ["/", "*", "-", "+", "%"];
 function App() {
   const [equationDisplay, setEquationDisplay] = useState(""); // what is shown in the display above buttons
   const [recentEquation, setRecentEquation] = useState("");
-  const [theme, setTheme] = useState<[string, string]>([
-    "lightblue",
-    "#91b4bf",
+  const [theme, setTheme] = useState<[string, string, string]>([
+    "lightblue", // main calculator color
+    "#91b4bf", // dark btns on right side
+    "#0c2027", // color of txt inside btns
   ]);
 
   const equationSpanRef = useRef<HTMLSpanElement>(null);
@@ -37,6 +38,7 @@ function App() {
     calcDivRef.current!.style.border = `2px solid ${theme[0]}`;
     document.querySelectorAll("button").forEach((b) => {
       b.style.backgroundColor = theme[0];
+      b.style.color = theme[2];
     });
     Array.from(document.getElementsByClassName("dark-button")).forEach(
       (b: any) => {
@@ -175,23 +177,23 @@ function App() {
           onChange={(e: any) => {
             switch (e.target.value) {
               case "blue":
-                setTheme(["lightblue", "#91b4bf"]);
+                setTheme(["lightblue", "#91b4bf", "#18414e"]);
                 break;
 
               case "green":
-                setTheme(["lightgreen", "#6bb36b"]);
+                setTheme(["lightgreen", "#6bb36b", "#0e580e"]);
                 break;
 
               case "red":
-                setTheme(["#FFCCCB", "#b89493"]);
+                setTheme(["#FFCCCB", "#b89493", "#660200"]);
                 break;
 
               case "yellow":
-                setTheme(["#FFFACD", "#d1d1b8"]);
+                setTheme(["#fff066", "#ccb800", "#665c00"]);
                 break;
 
               case "orange":
-                setTheme(["#FFD580", "#c9a865"]);
+                setTheme(["#FFD580", "#c9a865", "#664400"]);
                 break;
             }
           }}
