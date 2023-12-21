@@ -1,24 +1,92 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import { useState } from "react";
+import { evaluate } from "mathjs"; // THIS PACKAGE IS A LIFESAVER
+import "./App.css";
+
+const buttonValues = [
+  ["C", "+/-", "%", "÷"],
+  ["7", "8", "9", "*"],
+  ["4", "5", "6", "-"],
+  ["1", "2", "3", "+"],
+  ["0", ".", "="],
+];
+
+const operationSymbols = ["/", "*", "-", "+", "%"];
 
 function App() {
+  const [equationDisplay, setEquationDisplay] = useState(""); // what is shown in the display above buttons
+
+  function ButtonClick(value: any) {
+    switch (value) {
+      case "C":
+        setEquationDisplay("");
+        break;
+
+      case "=":
+        if (
+          equationDisplay.includes("/") ||
+          equationDisplay.includes("*") ||
+          equationDisplay.includes("-") ||
+          equationDisplay.includes("+") ||
+          equationDisplay.includes("%")
+        ) {
+          try {
+            setEquationDisplay(String(evaluate(equationDisplay)));
+          } catch (err) {}
+        }
+        break;
+
+      default:
+        if (value === "÷") {
+          value = "/";
+        }
+
+        if (
+          !operationSymbols.includes(
+            equationDisplay[equationDisplay.length - 1]
+          ) ||
+          !operationSymbols.includes(value)
+        ) {
+          setEquationDisplay((prev) => (prev += value));
+        }
+
+        break;
+    }
+  }
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div>
+      <div id="calculator">
+        <div id="calc_display_area">{equationDisplay}</div>
+
+        <div id="calc_buttons_area">
+          {buttonValues.map((x) => {
+            return (
+              <div>
+                {x.map((y) => {
+                  return y === "0" ? (
+                    <button
+                      className="half_stretch"
+                      onClick={() => {
+                        ButtonClick(y);
+                      }}
+                    >
+                      {y}
+                    </button>
+                  ) : (
+                    <button
+                      onClick={() => {
+                        ButtonClick(y);
+                      }}
+                    >
+                      {y}
+                    </button>
+                  );
+                })}
+              </div>
+            );
+          })}
+        </div>
+      </div>
     </div>
   );
 }
