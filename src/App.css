@@ -14,6 +14,7 @@ body {
 }
 
 #calc_display_area {
+  font-family: "Arial";
   height: 100px;
   text-align: end;
   padding-right: 5px;
